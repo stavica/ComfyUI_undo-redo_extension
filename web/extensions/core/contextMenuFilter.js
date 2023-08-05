@@ -24,24 +24,13 @@ const ext = {
 				let displayedItems = [...items];
 				let itemCount = displayedItems.length;
 
-				//  Original code of requestAnimationFrame.
-				// requestAnimationFrame(() => {
-				// 	const currentNode = LGraphCanvas.active_canvas.current_node;
-				// 	const clickedWidget = currentNode.widgets
-				// 		.filter(w => w.type === "combo" && w.options.values.length === values.length)
-				// 		.find(w => w.options.values.every((v, i) => v === values[i]));
-				
-				// 	if (clickedWidget !== undefined) {
-				// 	   const clickedComboValue = clickedWidget.value;
-				// 	   let selectedIndex = values.findIndex(v => v === clickedComboValue);
-				// 	   let selectedItem = displayedItems?.[selectedIndex];
-				// 	   updateSelected();
-
 				// We must request an animation frame for the current node of the active canvas to update.
 				requestAnimationFrame(() => {
-					console.log("Active canvas: ", LGraphCanvas.active_canvas);
+					// console.log("Active canvas: ", LGraphCanvas.active_canvas); // Commented this out for now, it's a lot of text, hard to troubleshoot with.
 					const currentNode = LGraphCanvas.active_canvas.current_node;
-					console.log("Current node: ", currentNode); 
+					//console.log("currentNode: ", currentNode);
+
+					//console.log('currentNode Widgets:', currentNode.widgets);
 					const clickedWidget = currentNode.widgets
 						.filter(w => w.type === "combo" && w.options.values.length === values.length)
 						.find(w => w.options.values.every((v, i) => v === values[i]));

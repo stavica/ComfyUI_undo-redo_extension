@@ -9,3 +9,5 @@ extra_model_paths.yaml
 /.vs
 .idea/
 venv/
+models/checkpoints/put_checkpoints_here
+models/checkpoints/put_checkpoints_here
