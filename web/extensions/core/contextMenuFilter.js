@@ -28,13 +28,9 @@ const ext = {
 				requestAnimationFrame(() => {
 					// console.log("Active canvas: ", LGraphCanvas.active_canvas); // Commented this out for now, it's a lot of text, hard to troubleshoot with.
 					const currentNode = LGraphCanvas.active_canvas.current_node;
-					//console.log("currentNode: ", currentNode);
-
-					//console.log('currentNode Widgets:', currentNode.widgets);
-					const clickedWidget = currentNode.widgets
-						.filter(w => w.type === "combo" && w.options.values.length === values.length)
-						.find(w => w.options.values.every((v, i) => v === values[i]));
-				
+					console.log("currentNode: ", currentNode); 
+					console.log('currentNode Widgets:', currentNode.widgets);
+					
 					// Apply highlighting to the selected item
 					function updateSelected() {
 						selectedItem?.style.setProperty("background-color", "");
@@ -44,12 +40,18 @@ const ext = {
 						selectedItem?.style.setProperty("color", "#000", "important");
 					}
 				
-					if (clickedWidget !== undefined) {
-						const clickedComboValue = clickedWidget.value;
-						selectedIndex = values.findIndex(v => v === clickedComboValue);
-						selectedItem = displayedItems?.[selectedIndex];
-				
-						updateSelected();
+					if (currentNode?.widgets) {
+						const clickedWidget = currentNode.widgets
+							.filter(w => w.type === "combo" && w.options.values.length === values.length)
+							.find(w => w.options.values.every((v, i) => v === values[i]));
+					
+						if (clickedWidget !== undefined) {
+							const clickedComboValue = clickedWidget.value;
+							selectedIndex = values.findIndex(v => v === clickedComboValue);
+							selectedItem = displayedItems?.[selectedIndex];
+					
+							updateSelected();
+						}
 					}
 
 					const positionList = () => {
