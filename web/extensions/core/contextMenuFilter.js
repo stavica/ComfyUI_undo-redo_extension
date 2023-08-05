@@ -2,16 +2,13 @@ import {app} from "../../scripts/app.js";
 
 // Adds filtering to combo context menus
 
-
-
 const ext = {
 	name: "Comfy.ContextMenuFilter",
 	init() {
 		const ctxMenu = LiteGraph.ContextMenu;
+
 		LiteGraph.ContextMenu = function (values, options) {
-			console.log("Context menu called")
 			const ctx = ctxMenu.call(this, values, options);
-			let selectedIndex, selectedItem; // Trying to declare selectedIndex and selectedItem at the start. 
 
 			// If we are a dark menu (only used for combo boxes) then add a filter input
 			if (options?.className === "dark" && values?.length > 10) {
@@ -26,11 +23,25 @@ const ext = {
 
 				// We must request an animation frame for the current node of the active canvas to update.
 				requestAnimationFrame(() => {
-					// console.log("Active canvas: ", LGraphCanvas.active_canvas); // Commented this out for now, it's a lot of text, hard to troubleshoot with.
 					const currentNode = LGraphCanvas.active_canvas.current_node;
-					console.log("currentNode: ", currentNode); 
-					console.log('currentNode Widgets:', currentNode.widgets);
+					console.log('Current node:', currentNode);
+					console.log('Current node widgets:', currentNode.widgets)
 					
+					let clickedComboValue;
+					if (currentNode.widgets) {
+						const clickedWidget = currentNode.widgets
+							.filter(w => w.type === "combo" && w.options.values.length === values.length)
+							.find(w => w.options.values.every((v, i) => v === values[i]));
+				
+						if (clickedWidget) {
+							clickedComboValue = clickedWidget.value;
+						}
+					}
+				
+					let selectedIndex = clickedComboValue ? values.findIndex(v => v === clickedComboValue) : 0;
+					let selectedItem = displayedItems?.[selectedIndex];
+					updateSelected();
+
 					// Apply highlighting to the selected item
 					function updateSelected() {
 						selectedItem?.style.setProperty("background-color", "");
@@ -38,20 +49,6 @@ const ext = {
 						selectedItem = displayedItems[selectedIndex];
 						selectedItem?.style.setProperty("background-color", "#ccc", "important");
 						selectedItem?.style.setProperty("color", "#000", "important");
-					}
-				
-					if (currentNode?.widgets) {
-						const clickedWidget = currentNode.widgets
-							.filter(w => w.type === "combo" && w.options.values.length === values.length)
-							.find(w => w.options.values.every((v, i) => v === values[i]));
-					
-						if (clickedWidget !== undefined) {
-							const clickedComboValue = clickedWidget.value;
-							selectedIndex = values.findIndex(v => v === clickedComboValue);
-							selectedItem = displayedItems?.[selectedIndex];
-					
-							updateSelected();
-						}
 					}
 
 					const positionList = () => {
@@ -100,7 +97,6 @@ const ext = {
 								selectedItem?.click();
 								break;
 							case "Escape":
-								console.log("Context menu closed")
 								this.close();
 								break;
 						}
@@ -138,7 +134,7 @@ const ext = {
 							positionList();
 						}
 					});
-						
+
 					requestAnimationFrame(() => {
 						// Focus the filter box when opening
 						filter.focus();
@@ -148,7 +144,6 @@ const ext = {
 				})
 			}
 
-			console.log("Context menu opened: before return ctx;"); 
 			return ctx;
 		};
 
