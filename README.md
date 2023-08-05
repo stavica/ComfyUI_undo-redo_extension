@@ -2,6 +2,9 @@ ComfyUI
 =======
 A powerful and modular stable diffusion GUI and backend.
 -----------
+This is a minor modification to ComfyUI, so far just including the addition of [bmad4ever's comfyUI Dirty Undo/Redo extension]([url](https://github.com/bmad4ever/ComfyUI-Bmad-DirtyUndoRedo)) and a modification to the /web/extensions/core/contextMenuFilter.js file.
+
+
 ![ComfyUI Screenshot](comfyui_screenshot.png)
 
 This ui will let you design and execute advanced stable diffusion pipelines using a graph/nodes/flowchart based interface. For some workflow examples and see what ComfyUI can do you can check out:
